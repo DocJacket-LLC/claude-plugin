@@ -1,0 +1,31 @@
+{
+  "name": "docjacket",
+  "displayName": "DocJacket — TC Operating System",
+  "version": "0.2.0",
+  "description": "Transaction Coordination for independent real estate TCs — search active deals, surface what needs attention today, look up key dates and contacts, and check missing documents. Read-only via the DocJacket MCP server.",
+  "author": {
+    "name": "DocJacket",
+    "email": "support@docjacket.com",
+    "url": "https://docjacket.com"
+  },
+  "homepage": "https://docjacket.com/ai-access",
+  "documentation": "https://docs.docjacket.com/ai-access/claude",
+  "repository": "https://github.com/DocJacket-LLC/claude-plugin",
+  "license": "MIT",
+  "keywords": [
+    "real-estate",
+    "transaction-coordinator",
+    "tc",
+    "closing",
+    "mcp"
+  ],
+  "categories": [
+    "productivity",
+    "real-estate",
+    "transaction-management"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "mcpServers": "./.mcp.json"
+}

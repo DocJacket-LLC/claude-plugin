@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "docjacket": {
+      "type": "http",
+      "url": "https://mcp.docjacket.com/mcp",
+      "headers": {
+        "X-DocJacket-Source-App": "claude-desktop",
+        "X-DocJacket-Plugin-Version": "0.2.0"
+      },
+      "tokenSetup": {
+        "instructions": "Mint a token at https://app.docjacket.com/settings/ai-access (Owner or Admin role required). Label it 'Claude Plugin' for per-surface revocation. Paste it as your Bearer token below.",
+        "linkUrl": "https://app.docjacket.com/settings/ai-access"
+      }
+    }
+  }
+}

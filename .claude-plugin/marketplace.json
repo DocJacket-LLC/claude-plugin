@@ -1,0 +1,12 @@
+{
+  "name": "docjacket",
+  "owner": "DocJacket",
+  "description": "DocJacket plugins for Claude — transaction coordination for independent real estate TCs.",
+  "plugins": [
+    {
+      "name": "docjacket",
+      "source": ".",
+      "description": "Connect DocJacket transactions, key dates, tasks, contacts, and document checklists to Claude. Read-only across all 10 tools; drafting and write tools land in v0.3 once the upstream MCP server reaches Phase 8."
+    }
+  ]
+}
