@@ -1,3 +1,7 @@
+<p align="left">
+  <img src="assets/logo-mark-128.png" alt="DocJacket" width="96" height="96" />
+</p>
+
 # DocJacket — Transaction Coordination plugin for Claude
 
 [![Plugin](https://img.shields.io/badge/Claude-plugin-blue)](https://claude.com/plugins)
@@ -107,3 +111,15 @@ This plugin is read-only and does NOT provide legal advice. See [`DISCLAIMER.md`
 - Docs: <https://docs.docjacket.com/mcp/claude>
 - Issues: <https://github.com/DocJacket-LLC/claude-plugin/issues>
 - Email: support@docjacket.com
+
+## Brand assets
+
+| File | Size | Use |
+|---|---|---|
+| [`assets/logo-mark.svg`](assets/logo-mark.svg) | vector | source / scalable |
+| [`assets/logo-mark-32.png`](assets/logo-mark-32.png) | 32×32 | favicon, dense list rows |
+| [`assets/logo-mark-64.png`](assets/logo-mark-64.png) | 64×64 | small directory cards |
+| [`assets/logo-mark-128.png`](assets/logo-mark-128.png) | 128×128 | plugin manifest icon |
+| [`assets/logo-mark-256.png`](assets/logo-mark-256.png) | 256×256 | medium cards |
+| [`assets/logo-mark-512.png`](assets/logo-mark-512.png) | 512×512 | marketplace tile |
+| [`assets/logo-mark-1024.png`](assets/logo-mark-1024.png) | 1024×1024 | hero / future-proof |
