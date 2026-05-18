@@ -8,8 +8,8 @@
     "email": "support@docjacket.com",
     "url": "https://docjacket.com"
   },
-  "homepage": "https://docjacket.com/ai-access",
-  "documentation": "https://docs.docjacket.com/ai-access/claude",
+  "homepage": "https://docjacket.com/mcp",
+  "documentation": "https://docs.docjacket.com/mcp/claude",
   "repository": "https://github.com/DocJacket-LLC/claude-plugin",
   "license": "MIT",
   "keywords": [

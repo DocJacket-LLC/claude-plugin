@@ -104,6 +104,6 @@ This plugin is read-only and does NOT provide legal advice. See [`DISCLAIMER.md`
 
 ## Support
 
-- Docs: <https://docs.docjacket.com/ai-access/claude>
+- Docs: <https://docs.docjacket.com/mcp/claude>
 - Issues: <https://github.com/DocJacket-LLC/claude-plugin/issues>
 - Email: support@docjacket.com
