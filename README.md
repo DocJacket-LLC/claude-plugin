@@ -12,6 +12,8 @@ Connect DocJacket transactions, tasks, deadlines, contacts, and document checkli
 
 **Works with:** Claude.ai (sidebar) · Cowork · Claude Code · Claude Desktop
 
+![DocJacket connector in Claude — 10 read tools, per-tool approval gates](assets/screenshots/claude-connector-tools.png)
+
 ## What you get
 
 - **10 read tools** exposed via the DocJacket MCP server at `https://mcp.docjacket.com/mcp`
