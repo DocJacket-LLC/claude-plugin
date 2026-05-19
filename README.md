@@ -5,7 +5,7 @@
 # DocJacket — Transaction Coordination plugin for Claude
 
 [![Plugin](https://img.shields.io/badge/Claude-plugin-blue)](https://claude.com/plugins)
-[![Version](https://img.shields.io/badge/version-0.2.0-green)]()
+[![Version](https://img.shields.io/badge/version-0.3.0-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
 
 Connect DocJacket transactions, tasks, deadlines, contacts, and document checklists to Claude. Triage your pipeline, brief on any active deal, and check missing documents — all from inside Claude.
@@ -40,45 +40,53 @@ Read-only. No writes, no autonomous actions. Drafting tools (`prepare_*` / `prop
 
 ## Install
 
+**No bearer tokens. No manual config.** Paste the server URL, click Allow on the consent screen, you're done. v0.3.0 uses OAuth 2.1 + Dynamic Client Registration end-to-end.
+
 ### Prerequisites
 
-1. A DocJacket account with Owner or Admin role.
-2. A bearer token from [`app.docjacket.com/settings/ai-access`](https://app.docjacket.com/settings/ai-access) — mint a new one, label it "Claude Plugin".
+A DocJacket account on the **Pro plan**. Connecting is free; loading tools requires Pro.
 
-### Install in Claude Code / Cowork (one-time)
+### Claude.ai (web sidebar)
+
+1. **Settings** → **Connectors** → **+ Add custom connector**
+2. Paste: `https://mcp.docjacket.com/mcp`
+3. Click **Continue**, then **Allow** on the DocJacket consent screen
+
+10 tools load. You're done.
+
+### Claude Desktop
+
+Same flow as Claude.ai:
+
+1. **Settings** → **Connectors** → **+ Add custom connector**
+2. Paste: `https://mcp.docjacket.com/mcp`
+3. Complete the OAuth consent screen
+
+### Claude Code / Cowork (plugin)
 
 ```bash
 /plugin marketplace add DocJacket-LLC/claude-plugin
 /plugin install docjacket
 ```
 
-When prompted, paste your bearer token. The MCP icon in the chat input should show `docjacket` with 10 tools available.
+On first tool call, your browser opens to complete OAuth consent. Access + refresh tokens are stored in your local keychain — no secrets in config files.
 
-### Install in Claude.ai (web)
+### Claude Desktop (manual config, advanced)
 
-1. Open [claude.com/plugins](https://claude.com/plugins).
-2. Search for "DocJacket" and click **Install**.
-3. Paste your bearer token in the connection dialog.
-
-### Install in Claude Desktop (advanced)
-
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+If you prefer editing `~/Library/Application Support/Claude/claude_desktop_config.json` directly:
 
 ```jsonc
 {
   "mcpServers": {
     "docjacket": {
       "type": "http",
-      "url": "https://mcp.docjacket.com/mcp",
-      "headers": {
-        "Authorization": "Bearer mcp_at_...paste-here..."
-      }
+      "url": "https://mcp.docjacket.com/mcp"
     }
   }
 }
 ```
 
-Restart Claude Desktop.
+Restart Claude Desktop. The first tool call triggers OAuth discovery via the WWW-Authenticate challenge — no `Authorization` header to set, no token to mint.
 
 ## Try it
 
@@ -92,7 +100,7 @@ Once installed, try:
 
 ## How attribution + revocation work
 
-Every plugin call carries `X-DocJacket-Source-App: claude-desktop` + `X-DocJacket-Plugin-Version: 0.2.0`. Audit them in [Activity Log](https://app.docjacket.com/settings/ai-access/activity) — filter by source, drill into per-token activity. Revoke individual tokens from `/settings/ai-access` without affecting other AI clients (Codex, ChatGPT, etc.).
+Every plugin call carries `X-DocJacket-Source-App: claude-desktop` + `X-DocJacket-Plugin-Version: 0.3.0`. Audit them in [Activity Log](https://app.docjacket.com/settings/ai-access/activity) — filter by source, drill into per-OAuth-client activity. Revoke any connected client from `/settings/ai-access` without affecting other AI assistants (Codex, ChatGPT, etc.).
 
 ## Optional connectors
 
@@ -104,13 +112,15 @@ This plugin is read-only and does NOT provide legal advice. See [`DISCLAIMER.md`
 
 ## Version
 
+`0.3.0` (2026-05-18) — OAuth 2.1 + Dynamic Client Registration. Paste-URL-and-go install — no bearer tokens, no manual config. Tracks DocJacket MCP server PR #494 (HTTP 401 + WWW-Authenticate + `initialize` handshake).
+
 `0.2.0` (2026-05-18) — Daily Triage collapsed to one call (`get_next_required_actions`); 10 read tools live. Tracks DocJacket MCP server v0.9 + Plugin Cycle 3.
 
 `0.1.0` (2026-05-17) — Initial release: 5 read tools, Daily Triage skill.
 
 ## Support
 
-- Docs: <https://docs.docjacket.com/mcp/claude>
+- Docs: <https://help.docjacket.com/docs/mcp/claude>
 - Issues: <https://github.com/DocJacket-LLC/claude-plugin/issues>
 - Email: support@docjacket.com
 
