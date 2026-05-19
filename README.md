@@ -5,42 +5,49 @@
 # DocJacket — Transaction Coordination plugin for Claude
 
 [![Plugin](https://img.shields.io/badge/Claude-plugin-blue)](https://claude.com/plugins)
-[![Version](https://img.shields.io/badge/version-0.3.0-green)]()
+[![Version](https://img.shields.io/badge/version-0.6.0-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
 
-Connect DocJacket transactions, tasks, deadlines, contacts, and document checklists to Claude. Triage your pipeline, brief on any active deal, and check missing documents — all from inside Claude.
+Connect DocJacket transactions, tasks, deadlines, contacts, and document checklists to Claude. Triage your pipeline, draft and send follow-up emails from your connected Gmail/Outlook, classify inbound attachments against the right deal — all from inside Claude.
 
 **Works with:** Claude.ai (sidebar) · Cowork · Claude Code · Claude Desktop
 
-![DocJacket connector in Claude — 10 read tools, per-tool approval gates](assets/screenshots/claude-connector-tools.png)
+![DocJacket connector in Claude](assets/screenshots/claude-connector-tools.png)
 
 ## What you get
 
-- **10 read tools** exposed via the DocJacket MCP server at `https://mcp.docjacket.com/mcp`
-- **Daily Triage** skill — single call returns every transaction needing attention, pre-ranked overdue-first with rationales
-- **Status Reporter** sub-agent (Cowork) — read-only weekly briefing across every active deal
-- **`/docjacket:daily-triage`** slash command (Claude Code)
+- **Full read + send tool suite** via the DocJacket MCP server at `https://mcp.docjacket.com/mcp`. Call `mcp_catalog` after install for the live inventory + per-tool gotchas and example calls.
+- **`mcp_health_check`** — first call when integrating; verifies auth, scopes, and DB reachability before you start a workflow.
+- **8 skills** ship with this plugin: `daily-triage`, `email-triage`, `closing-prep`, `follow-up-drafting`, `document-filing`, `contact-management`, `execution-workflow`, `tc-context`. The agent picks them automatically based on what you ask.
+- **6 slash commands** (Claude Code): `/docjacket:daily-triage`, `/docjacket:morning-briefing`, `/docjacket:email-triage`, `/docjacket:doc-check`, `/docjacket:share-portal`, `/docjacket:weekly-report`.
+- **Status Reporter** sub-agent (Cowork) — read-only weekly briefing across every active deal.
 
-Read-only. No writes, no autonomous actions. Drafting tools (`prepare_*` / `propose_*`) and the Communication Drafter sub-agent ship in **v0.3** once the upstream MCP server reaches Phase 8.
+Three scope tiers — Read (search, summarize), Draft (compose without sending), Actions (send emails, create tasks, update dates). You authorize once at OAuth consent; the chat is the per-call approval gate.
 
 ## Tool catalog
 
+Selected highlights below. For the **live and complete** list with per-tool gotchas, pairing hints, and example calls, run `mcp_catalog` after install — the server returns its own enumeration so this README never drifts.
+
 | Tool | Purpose |
 |---|---|
+| `mcp_health_check` | Verify auth, scopes, and DB reachability. Run this first when integrating. |
+| `mcp_catalog` | Enriched list of every tool you can call — gotchas, pairings, examples. |
 | `search_transactions` | Search by address, party name, MLS, status |
 | `get_transaction` | Full state of one deal including joined key dates + parties |
 | `get_key_dates` | Key Dates for one transaction |
-| `get_open_tasks` | Open tasks org-wide or per transaction |
-| `get_contacts` | Contacts in your org |
 | `get_upcoming_key_dates` | Org-wide upcoming deadlines, default 14-day horizon |
-| `list_open_contingencies` | Open contingencies on one transaction |
-| `get_next_required_actions` | **Bundled-judgment "what to do next?"** — overdue + upcoming, pre-ranked with rationales |
-| `find_transaction_by_property` | Fuzzy address-to-deal matching with confidence scores |
+| `get_next_required_actions` | **Bundled judgment** — overdue + upcoming, pre-ranked with rationales |
 | `get_missing_documents` | Universal-baseline missing-doc detection for purchase deals |
+| `find_transaction_by_property` | Fuzzy address-to-deal matching with confidence scores |
+| `list_active_transactions` | Inbox-workflow shortcut — every active deal, optional party / key-date expansion |
+| `search_contacts` / `get_contact` | Contact lookup by name/email/phone/company |
+| `list_email_templates` / `get_email_template` / `render_email_template` | Templated email composition |
+| `send_client_update` / `send_agent_followup` / `send_document_request` / `send_email_to_agent` | Direct execution from your connected Gmail/Outlook |
+| `create_tasks` / `update_key_date` / `complete_task` / `save_status_summary` | Direct execution against DocJacket |
 
 ## Install
 
-**No bearer tokens. No manual config.** Paste the server URL, click Allow on the consent screen, you're done. v0.3.0 uses OAuth 2.1 + Dynamic Client Registration end-to-end.
+**No bearer tokens. No manual config.** Paste the server URL, click Allow on the consent screen, you're done. OAuth 2.1 + Dynamic Client Registration end-to-end.
 
 ### Prerequisites
 
@@ -52,7 +59,7 @@ A DocJacket account on the **Pro plan**. Connecting is free; loading tools requi
 2. Paste: `https://mcp.docjacket.com/mcp`
 3. Click **Continue**, then **Allow** on the DocJacket consent screen
 
-10 tools load. You're done.
+The tool list loads. Run `mcp_health_check` once to confirm scopes; then `mcp_catalog` for the full inventory.
 
 ### Claude Desktop
 
@@ -100,7 +107,7 @@ Once installed, try:
 
 ## How attribution + revocation work
 
-Every plugin call carries `X-DocJacket-Source-App: claude-desktop` + `X-DocJacket-Plugin-Version: 0.3.0`. Audit them in [Activity Log](https://app.docjacket.com/settings/ai-access/activity) — filter by source, drill into per-OAuth-client activity. Revoke any connected client from `/settings/ai-access` without affecting other AI assistants (Codex, ChatGPT, etc.).
+Every plugin call carries `X-DocJacket-Source-App: claude-desktop` + `X-DocJacket-Plugin-Version: 0.6.0`. Audit them in [Activity Log](https://app.docjacket.com/settings/ai-access/activity) — filter by source, drill into per-OAuth-client activity. Revoke any connected client from `/settings/ai-access` without affecting other AI assistants (Codex, ChatGPT, etc.).
 
 ## Optional connectors
 
@@ -108,9 +115,11 @@ The plugin composes with Claude's Gmail, Google Calendar, Google Drive, and Slac
 
 ## Compliance + disclaimer
 
-This plugin is read-only and does NOT provide legal advice. See [`DISCLAIMER.md`](DISCLAIMER.md) for the full scope, per-state coverage notes, and liability framing.
+This plugin does NOT provide legal advice. See [`DISCLAIMER.md`](DISCLAIMER.md) for the full scope, per-state coverage notes, and liability framing.
 
 ## Version
+
+`0.6.0` (2026-05-19) — Catches up to the v0.6 internal source: 8 skills (was 1), 6 commands (was 1), inbox-workflow tool set including Draft + Actions scopes. New diagnostic tools `mcp_health_check` and `mcp_catalog`. Every tool response now includes `structuredContent` + opt-in `breadcrumbs` per MCP spec 2025-06-18 §Tool Result. Tracks DocJacket MCP server PRs #549–#551.
 
 `0.3.0` (2026-05-18) — OAuth 2.1 + Dynamic Client Registration. Paste-URL-and-go install — no bearer tokens, no manual config. Tracks DocJacket MCP server PR #494 (HTTP 401 + WWW-Authenticate + `initialize` handshake).
 

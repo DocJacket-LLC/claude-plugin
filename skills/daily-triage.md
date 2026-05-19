@@ -1,11 +1,16 @@
+<!--
+  Generated from plugins/shared/skills/daily-triage.md — do not hand-edit.
+  Update the canonical file and re-sync. See plugins/README.md for the rule.
+  Generator: hand-curated v1 (per spec §3.3). Last sync: 2026-05-18.
+-->
+
 ---
 name: daily-triage
 title: Daily Triage
 purpose: Find every transaction that needs attention today and surface the next action per deal, grouped by urgency.
-applicable_to: [codex, cowork, chatgpt]
+connector: docjacket
 tools_used:
-  - get_next_required_actions
-expected_output: Bulleted list grouped by urgency (overdue / due-72h / due-2w / pending-approval). Most urgent first.
+  - DocJacket.get_next_required_actions
 required_scopes: [read]
 version: 0.2.0
 ---
@@ -27,11 +32,10 @@ Trigger on any variation of:
 
 **One call. The tool returns a pre-ranked, pre-bucketed feed.**
 
-1. Call `get_next_required_actions` with `limit: 75`. (Optional: pass `transactionId` to scope to a single deal.)
+1. Call `DocJacket.get_next_required_actions` with `limit: 75`. (Optional: pass `transactionId` to scope to a single deal.)
 2. The response is already sorted overdue-first and tagged with `urgency` per row — group by the `urgency` field as-is.
-3. (Once `list_prepared_work` ships in Cycle 2+, add a second call to surface pending-approval items as a 4th bucket. Skip for now.)
 
-That's it. **Do not fan out per transaction** — the previous v0.1 workflow called `search_transactions` then `get_open_tasks` + `get_key_dates` per active deal then sorted client-side. That's been replaced by this single call, and re-introducing the old pattern wastes 50+ tool calls per triage on a busy org.
+**Do not fan out per transaction** — the previous v0.1 workflow called `search_transactions` then `get_open_tasks` + `get_key_dates` per active deal then sorted client-side. That's been replaced by this single call.
 
 ## Output shape
 
@@ -58,35 +62,18 @@ Use the `urgency` field to decide the section header:
 | `due_2w`  | Due within 2 weeks | 📅 |
 | `due_4w`  | Due within 4 weeks | 📋 |
 
-Render the `rationale` string verbatim — it's already phrased for human reading. Prefix each row with the `transactionAddress` (or "—" if null) followed by an em-dash.
+Render the `rationale` string verbatim. Prefix each row with the `transactionAddress` followed by an em-dash.
 
 If `summary.totalCount === 0`, render: `✅ All clear — no items need attention right now.`
 
-For each non-empty bucket, the section header should include the count from `summary` (e.g. `🔥 Overdue (3)`).
+## Anti-patterns
 
-## Anti-patterns (do not do)
-
-- **Don't** call `search_transactions` + `get_open_tasks` + `get_key_dates` separately and re-sort. That was the v0.1 workflow; `get_next_required_actions` does it server-side now in one shot.
-- **Don't** call `get_transaction` to look up the address — `transactionAddress` is already on each row.
-- **Don't** call `get_next_required_actions` per transaction in a loop. One org-wide call covers everything; the `transactionId` arg is only for the rare "scope to this deal" case.
-- **Don't** summarize what was already completed or approved. Triage is about what still needs a decision.
-- **Don't** propose any writes from this skill. Triage is read-only. If the user follows up with "draft the emails" or "send these", that's a separate skill invocation (Phase 8+).
-- **Don't** flatten the buckets into one mixed list — the urgency grouping is the whole point.
-
-## Example invocation trace
-
-User: _"What needs my attention today?"_
-
-```
-[1] get_next_required_actions(limit: 75)
-    → 26 actions returned (1 overdue, 5 due_72h, 12 due_2w, 8 due_4w)
-[2] Group by urgency.field; render grouped list per the Output shape table above.
-```
-
-Total: 1 tool call. Typical latency ~150ms.
+- **Don't** call `search_transactions` + `get_open_tasks` + `get_key_dates` separately and re-sort. The server-side bundled-judgment tool does this in one shot.
+- **Don't** call `get_transaction` to look up addresses — `transactionAddress` is on each row.
+- **Don't** call `get_next_required_actions` per transaction in a loop. One org-wide call covers everything.
+- **Don't** summarize completed or approved items.
+- **Don't** propose writes from this skill — triage is read-only.
 
 ## Skill version
 
-`v0.2.0` — collapsed from 4-call workflow to single `get_next_required_actions` call. The substrate now provides the ranking + rationales; the agent's job is just to render.
-
-`v0.1.0` (prior) — orchestrated `search_transactions` + `get_open_tasks` + `get_key_dates` per active transaction, then client-side bucketed + sorted. Retired 2026-05-18 when the bundled-judgment tool shipped.
+`v0.2.0` — single-call workflow via `get_next_required_actions`.
