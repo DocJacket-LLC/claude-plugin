@@ -1,15 +1,15 @@
 {
   "name": "docjacket",
   "displayName": "DocJacket — TC Operating System",
-  "version": "0.2.0",
-  "description": "Transaction Coordination for independent real estate TCs — search active deals, surface what needs attention today, look up key dates and contacts, and check missing documents. Read-only via the DocJacket MCP server.",
+  "version": "0.3.0",
+  "description": "Transaction Coordination for independent real estate TCs — search active deals, surface what needs attention today, look up key dates and contacts, and check missing documents. Read-only via the DocJacket MCP server. Paste-URL-and-go install via OAuth 2.1 + DCR.",
   "author": {
     "name": "DocJacket",
     "email": "support@docjacket.com",
     "url": "https://docjacket.com"
   },
-  "homepage": "https://docjacket.com/mcp",
-  "documentation": "https://docs.docjacket.com/mcp/claude",
+  "homepage": "https://www.docjacket.com/mcp",
+  "documentation": "https://help.docjacket.com/docs/mcp/claude",
   "repository": "https://github.com/DocJacket-LLC/claude-plugin",
   "license": "MIT",
   "keywords": [
