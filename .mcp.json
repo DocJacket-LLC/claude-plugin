@@ -5,7 +5,7 @@
       "url": "https://mcp.docjacket.com/mcp",
       "headers": {
         "X-DocJacket-Source-App": "claude-desktop",
-        "X-DocJacket-Plugin-Version": "0.6.0"
+        "X-DocJacket-Plugin-Version": "0.6.1"
       }
     }
   }
