@@ -5,7 +5,7 @@
 # DocJacket — Transaction Coordination plugin for Claude
 
 [![Plugin](https://img.shields.io/badge/Claude-plugin-blue)](https://claude.com/plugins)
-[![Version](https://img.shields.io/badge/version-0.6.1-green)]()
+[![Version](https://img.shields.io/badge/version-0.6.2-green)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey)]()
 
 Connect DocJacket transactions, tasks, deadlines, contacts, and document checklists to Claude. Triage your pipeline, draft and send follow-up emails from your connected Gmail/Outlook, classify inbound attachments against the right deal — all from inside Claude.
