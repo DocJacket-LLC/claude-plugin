@@ -19,7 +19,7 @@ Connect DocJacket transactions, tasks, deadlines, contacts, and document checkli
 - **Full read + send tool suite** via the DocJacket MCP server at `https://mcp.docjacket.com/mcp`. Call `mcp_catalog` after install for the live inventory + per-tool gotchas and example calls.
 - **`mcp_health_check`** — first call when integrating; verifies auth, scopes, and DB reachability before you start a workflow.
 - **8 skills** ship with this plugin: `daily-triage`, `email-triage`, `closing-prep`, `follow-up-drafting`, `document-filing`, `contact-management`, `execution-workflow`, `tc-context`. The agent picks them automatically based on what you ask.
-- **6 slash commands** (Claude Code): `/docjacket:daily-triage`, `/docjacket:morning-briefing`, `/docjacket:email-triage`, `/docjacket:doc-check`, `/docjacket:share-portal`, `/docjacket:weekly-report`.
+- **9 slash commands** (Cowork + Claude Code): `/docjacket:morning-briefing`, `/docjacket:whats-next`, `/docjacket:email-triage`, `/docjacket:doc-check`, `/docjacket:weekly-report`, `/docjacket:share-portal`, `/docjacket:intake-contract`, `/docjacket:send-template`, `/docjacket:check-submissions`. See [Slash Commands reference](https://help.docjacket.com/docs/mcp/slash-commands) for what each one does.
 - **Status Reporter** sub-agent (Cowork) — read-only weekly briefing across every active deal.
 
 Three scope tiers — Read (search, summarize), Draft (compose without sending), Actions (send emails, create tasks, update dates). You authorize once at OAuth consent; the chat is the per-call approval gate.
@@ -72,7 +72,7 @@ Same flow as Claude.ai:
 ### Claude Code / Cowork (plugin)
 
 ```bash
-/plugin marketplace add DocJacket-LLC/claude-plugin
+/plugin marketplace add docjacket-inc/claude-plugin
 /plugin install docjacket
 ```
 
@@ -107,7 +107,7 @@ Once installed, try:
 
 ## How attribution + revocation work
 
-Every plugin call carries `X-DocJacket-Source-App: claude-desktop` + `X-DocJacket-Plugin-Version: 0.6.0`. Audit them in [Activity Log](https://app.docjacket.com/settings/ai-access/activity) — filter by source, drill into per-OAuth-client activity. Revoke any connected client from `/settings/ai-access` without affecting other AI assistants (Codex, ChatGPT, etc.).
+Every plugin call carries `X-DocJacket-Source-App: claude-desktop` + `X-DocJacket-Plugin-Version: 0.6.1`. Audit them in [Activity Log](https://app.docjacket.com/settings/ai-access/activity) — filter by source, drill into per-OAuth-client activity. Revoke any connected client from `/settings/ai-access` without affecting other AI assistants (Codex, ChatGPT, etc.).
 
 ## Optional connectors
 
@@ -119,6 +119,8 @@ This plugin does NOT provide legal advice. See [`DISCLAIMER.md`](DISCLAIMER.md) 
 
 ## Version
 
+`0.6.1` (2026-05-20) — Adds three new slash commands: `/docjacket:whats-next` (ranked task + key-date feed), `/docjacket:send-template` (pick template → render → send via connected Gmail/Outlook), `/docjacket:check-submissions` (review new intake-form submissions). Tracks DocJacket MCP server PR #563.
+
 `0.6.0` (2026-05-19) — Catches up to the v0.6 internal source: 8 skills (was 1), 6 commands (was 1), inbox-workflow tool set including Draft + Actions scopes. New diagnostic tools `mcp_health_check` and `mcp_catalog`. Every tool response now includes `structuredContent` + opt-in `breadcrumbs` per MCP spec 2025-06-18 §Tool Result. Tracks DocJacket MCP server PRs #549–#551.
 
 `0.3.0` (2026-05-18) — OAuth 2.1 + Dynamic Client Registration. Paste-URL-and-go install — no bearer tokens, no manual config. Tracks DocJacket MCP server PR #494 (HTTP 401 + WWW-Authenticate + `initialize` handshake).
@@ -127,10 +129,17 @@ This plugin does NOT provide legal advice. See [`DISCLAIMER.md`](DISCLAIMER.md) 
 
 `0.1.0` (2026-05-17) — Initial release: 5 read tools, Daily Triage skill.
 
+## Read more on help.docjacket.com
+
+- **[Connect Claude](https://help.docjacket.com/docs/mcp/claude)** — install walkthrough for Claude.ai / Cowork / Claude Code / Claude Desktop
+- **[Contract Intake](https://help.docjacket.com/docs/mcp/contract-intake)** — drop a PDF in chat, get a fully-set-up transaction back
+- **[Slash Commands](https://help.docjacket.com/docs/mcp/slash-commands)** — full reference for the 9 `/docjacket:` commands
+- **[Tool Catalog (`mcp_catalog`)](https://help.docjacket.com/docs/mcp/mcp-catalog)** — what `mcp_catalog` returns + how to read it
+- **[AI Access overview](https://help.docjacket.com/docs/ai-access)** — the umbrella feature, OAuth model, scope tiers, audit
+
 ## Support
 
-- Docs: <https://help.docjacket.com/docs/mcp/claude>
-- Issues: <https://github.com/DocJacket-LLC/claude-plugin/issues>
+- Issues: <https://github.com/docjacket-inc/claude-plugin/issues>
 - Email: support@docjacket.com
 
 ## Brand assets
