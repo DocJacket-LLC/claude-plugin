@@ -15,7 +15,7 @@ Walk the TC from "I just got a signed contract" to "the deal is fully set up in 
 
 Per the `contract-intake` skill recipe:
 
-1. **Upload** — call `upload_document_for_extraction` with the PDF as `fileBase64`, the filename, and any state / side / document-type hints the TC mentioned.
+1. **Upload** — preferred path is two-step: `request_upload_url({ filename })` returns a `uploadUrl` + `uploadId`; PUT the PDF bytes to `uploadUrl` (outside the LLM); then `kick_off_extraction({ uploadId, filename, state?, side?, documentTypeHint? })`. This keeps PDF bytes out of chat context (a 5 MB PDF base64-encoded would burn ~6.7 MB of tokens for the rest of the conversation). For small PDFs or clients that can't PUT to a presigned URL, fall back to `upload_document_for_extraction({ fileBase64, filename, ... })`.
 2. **Poll** — call `get_extraction_results` every 2-3 seconds until `status: "complete"`. Surface a "still working…" update if the wait exceeds 15 seconds. Cap at 10 minutes total.
 3. **Confirm** — paraphrase the extracted fields (property, parties, dates, financials) and ask the TC to confirm or edit. Don't dump JSON.
 4. **Apply** — call `apply_extraction` with any user edits as a flat `overrides` map. The response gives you the new `transactionId` — pin every follow-up call to it.
